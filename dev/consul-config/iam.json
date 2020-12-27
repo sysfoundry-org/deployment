@@ -6,6 +6,7 @@
             "port": 8080,
             "meta": {
                 "domain": "security",
+                "solution-key": "xyz-solution",
                 "external-app-uri": "http://localhost:8080/auth"
             },        
             "check": {
@@ -24,6 +25,7 @@
             "port": 8080,
             "meta": {
                 "domain": "security",
+                "solution-key": "xyz-solution",
                 "has-gui": "true",
                 "public-uri": "http://localhost:8080/auth/realms/Example/account/"
             },        
@@ -36,7 +38,27 @@
               "interval": "10s",
               "timeout": "1s"
             }
-          }
+          },
+          {
+            "id": "realm-management",
+            "name": "realm-management",
+            "port": 8080,
+            "meta": {
+                "domain": "security",
+                "solution-key": "xyz-solution",
+                "has-gui": "true",
+                "public-uri": "http://localhost:8080/auth/admin/Example/console/"
+            },        
+            "check": {
+              "id": "realm-management-health",
+              "name": "Health check for realm management App Service",
+              "http": "http://localhost:9990/health",
+              "tls_skip_verify": false,
+              "method": "GET",
+              "interval": "10s",
+              "timeout": "1s"
+            }
+          }          
     ]
       
 }

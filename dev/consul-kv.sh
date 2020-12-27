@@ -1,1 +1,1 @@
-consul kv put service-config/simpleapp/data @service-config/$1
+consul kv put $1/service-config/$2/data @service-config/$2.yml

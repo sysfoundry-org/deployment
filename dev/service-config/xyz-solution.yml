@@ -40,7 +40,7 @@ isis:
         css: css/application.css
         favicon-url: images/favicon.png
         js: scripts/application.js
-        name: Sysfoundry Portal
+        name: xyz-solution portal
         menubars-layout-xml: menubars.layout.xml
 
       credit:
@@ -97,15 +97,16 @@ spring:
       discovery:
         metadata:
           domain: general
+          solution-key: ${sf.solution.name}
           has-gui: true
-          public-uri: http://localhost:9090/wicket
           secure: true
-          
+          public-uri: http://localhost:9090/wicket/
+
 keycloak:
   realm: Example
   auth-server-url: http://localhost:8080/auth
   ssl-required: external
-  resource: simpleapp
+  resource: ${sf.solution.name}
   public-client: true
   verify-token-audience: true
   use-resource-role-mappings: true
