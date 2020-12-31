@@ -1,0 +1,47 @@
+version: '2.0'
+
+volumes:
+  db: {}
+
+services:
+  consul:
+    image: consul:1.9.1
+    command: ["agent","-dev","-client=0.0.0.0"]
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    volumes:
+      - ./consul/config:/consul/config
+      - ./service/config:/service/config
+  db:
+    image: postgres:13.1
+    depends_on: 
+      - "consul"
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  keycloak:
+    image: jboss/keycloak:12.0.1
+    depends_on: 
+      - "consul"
+      - "db"
+    command: ["-b","keycloak","-bmanagement","keycloak"]
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    environment:
+      #JBOSS_HOST: keycloak
+      #JAVA_OPTS_APPEND: "-Dkeycloak.frontendUrl=http://keycloak:8080"
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: postgres
+      DB_PORT: 5432
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_SCHEMA: public
+      DB_ADDR: db

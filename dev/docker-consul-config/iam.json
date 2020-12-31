@@ -1,0 +1,66 @@
+{
+    "services" : [
+        {
+            "id": "iam",
+            "name": "iam",
+            "port": 8080,
+            "meta": {
+                "domain": "security",
+                "solution-key": "xyz-solution",
+                "external-app-uri": "http://localhost:8080/auth"
+            },        
+            "check": {
+              "id": "iam-health",
+              "name": "Health check for IAM Service",
+              "http": "http://sf-keycloak-dev:9990/health",
+              "tls_skip_verify": false,
+              "method": "GET",
+              "interval": "10s",
+              "timeout": "1s"
+            }
+          },
+          {
+            "id": "account",
+            "name": "account",
+            "port": 8080,
+            "meta": {
+                "domain": "security",
+                "solution-key": "xyz-solution",
+                "has-gui": "true",
+                "public-uri": "http://sf-keycloak-dev:8080/auth/realms/Example/account/"
+            },        
+            "check": {
+              "id": "account-health",
+              "name": "Health check for Account App Service",
+              "http": "http://sf-keycloak-dev:9990/health",
+              "tls_skip_verify": false,
+              "method": "GET",
+              "interval": "10s",
+              "timeout": "1s"
+            }
+          },
+          {
+            "id": "realm-management",
+            "name": "realm-management",
+            "port": 8080,
+            "meta": {
+                "domain": "security",
+                "solution-key": "xyz-solution",
+                "has-gui": "true",
+                "public-uri": "http://sf-keycloak-dev:8080/auth/admin/Example/console/"
+            },        
+            "check": {
+              "id": "realm-management-health",
+              "name": "Health check for realm management App Service",
+              "http": "http://sf-keycloak-dev:9990/health",
+              "tls_skip_verify": false,
+              "method": "GET",
+              "interval": "10s",
+              "timeout": "1s"
+            }
+          }          
+    ]
+      
+}
+
+
