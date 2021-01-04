@@ -24,6 +24,13 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+  service_config_loader:
+    image: appropriate/curl
+    depends_on:
+      - "consul"
+    volumes:
+      - .:/cfg
+    command: ["sh","/cfg/load-config.sh","xyz-solution"]
   keycloak:
     image: jboss/keycloak:12.0.1
     depends_on: 
@@ -33,11 +40,14 @@ services:
     ports:
       - "8080:8080"
       - "9990:9990"
+    volumes:
+      - ./security_realms:/security_realms
     environment:
       #JBOSS_HOST: keycloak
       #JAVA_OPTS_APPEND: "-Dkeycloak.frontendUrl=http://keycloak:8080"
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /security_realms/xyz_solution_realm.json
       DB_VENDOR: postgres
       DB_PORT: 5432
       DB_DATABASE: keycloak
@@ -45,3 +55,14 @@ services:
       DB_PASSWORD: postgres
       DB_SCHEMA: public
       DB_ADDR: db
+  sf-portal:
+    image: sf-svc-portal:1.0-SNAPSHOT
+    ports:
+      - "9090:9090"
+    depends_on:
+      - "consul"
+      - "db"
+      - "keycloak"
+      - "service_config_loader"  
+    environment:
+      JAVA_TOOL_OPTIONS: "-Disis.security.logout.external=true -Dsf.solution.name=xyz-solution -Dspring.cloud.consul.host=consul"

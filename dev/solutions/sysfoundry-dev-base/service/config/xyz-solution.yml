@@ -65,7 +65,7 @@ isis:
         javax:
           jdo:
             option:
-              ConnectionURL: jdbc:postgresql://localhost:15432/${sf.solution.name}
+              ConnectionURL: jdbc:postgresql://db:5432/${sf.solution.name}
               ConnectionDriverName: org.postgresql.Driver
               ConnectionUserName: postgres
               ConnectionPassword: postgres
