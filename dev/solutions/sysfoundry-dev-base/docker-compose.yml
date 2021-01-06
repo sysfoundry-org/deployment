@@ -65,7 +65,7 @@ services:
       DB_SCHEMA: public
       DB_ADDR: db
   sf-portal:
-    image: sf-svc-portal:1.0-SNAPSHOT
+    image: sysfoundry/sf-svc-portal:1.0-SNAPSHOT
     ports:
       - "9090:9090"
     depends_on:
