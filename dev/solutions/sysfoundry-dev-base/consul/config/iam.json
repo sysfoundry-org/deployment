@@ -3,11 +3,13 @@
         {
             "id": "iam",
             "name": "iam",
+            "address": "keycloak",
             "port": 8080,
+            "tags":["urlprefix-/auth"],
             "meta": {
                 "domain": "security",
                 "solution-key": "xyz-solution",
-                "external-app-uri": "http://keycloak:8080/auth"
+                "external-app-uri": "http://localhost:9999/auth"
             },        
             "check": {
               "id": "iam-health",
@@ -27,7 +29,7 @@
                 "domain": "security",
                 "solution-key": "xyz-solution",
                 "has-gui": "true",
-                "public-uri": "http://keycloak:8080/auth/realms/xyz-solution/account/"
+                "public-uri": "http://localhost:9999/auth/realms/xyz-solution/account/"
             },        
             "check": {
               "id": "account-health",
@@ -47,7 +49,7 @@
                 "domain": "security",
                 "solution-key": "xyz-solution",
                 "has-gui": "true",
-                "public-uri": "http://keycloak:8080/auth/admin/xyz-solution/console/"
+                "public-uri": "http://localhost:9999/auth/admin/xyz-solution/console/"
             },        
             "check": {
               "id": "realm-management-health",

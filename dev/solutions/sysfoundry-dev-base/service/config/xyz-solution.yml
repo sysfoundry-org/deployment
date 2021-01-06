@@ -34,18 +34,19 @@ isis:
 
   viewer:
     wicket:
+      base-path: /portal/
       application:
         about: ${isis.viewer.wicket.application.name}
-        brand-logo-header: images/apache-isis/logo-48x48.png
-        css: css/application.css
-        favicon-url: images/favicon.png
-        js: scripts/application.js
+        brand-logo-header: portal/images/apache-isis/logo-48x48.png
+        css: portal/css/application.css
+        favicon-url: portal/images/favicon.png
+        js: portal/scripts/application.js
         name: xyz-solution portal
         menubars-layout-xml: menubars.layout.xml
 
       credit:
         - url:  http://sysfoundry.org
-          image: images/apache-isis/logo-48x48.png
+          image: portal/images/apache-isis/logo-48x48.png
           name: Sysfoundry
 
       themes:
@@ -97,17 +98,20 @@ server:
   max-http-header-size: 16KB
 
 spring:
+  mvc:
+    static-path-pattern: /portal/**
   banner:
     location: banner.txt
   cloud:
     consul:
       discovery:
+        tags: urlprefix-/portal
         metadata:
           domain: general
           solution-key: ${sf.solution.name}
           has-gui: true
           secure: true
-          public-uri: http://localhost:9090/wicket/
+          public-uri: http://localhost:9090/portal/
 
 keycloak:
   realm: ${sf.solution.name}

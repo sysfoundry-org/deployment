@@ -13,6 +13,13 @@ services:
     volumes:
       - ./consul/config:/consul/config
       - ./service/config:/service/config
+  fabio:
+    image: fabiolb/fabio:1.5.15-go1.15.5
+    ports:
+      - "9999:9999"
+      - "9998:9998"
+    volumes:
+      - ./fabiolb/config:/etc/fabio    
   db:
     image: postgres:13.1
     depends_on: 
@@ -37,14 +44,16 @@ services:
       - "consul"
       - "db"
     command: ["-b","keycloak","-bmanagement","keycloak"]
-    ports:
-      - "8080:8080"
-      - "9990:9990"
+    #ports:
+    #  - "8080:8080"
+    #  - "9990:9990"
     volumes:
       - ./security_realms:/security_realms
     environment:
       #JBOSS_HOST: keycloak
       #JAVA_OPTS_APPEND: "-Dkeycloak.frontendUrl=http://keycloak:8080"
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_FRONTEND_URL: http://localhost:9999/auth/
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
       KEYCLOAK_IMPORT: /security_realms/xyz_solution_realm.json
@@ -56,7 +65,7 @@ services:
       DB_SCHEMA: public
       DB_ADDR: db
   sf-portal:
-    image: sysfoundry/sf-svc-portal:1.0-SNAPSHOT
+    image: sf-svc-portal:1.0-SNAPSHOT
     ports:
       - "9090:9090"
     depends_on:
