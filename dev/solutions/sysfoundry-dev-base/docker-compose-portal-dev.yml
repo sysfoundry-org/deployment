@@ -12,7 +12,6 @@ services:
       - "8600:8600/udp"
     volumes:
       - ./consul/config:/consul/config
-      - ./service/config:/service/config
   fabio:
     image: fabiolb/fabio:1.5.15-go1.15.5
     ports:
@@ -36,7 +35,7 @@ services:
     depends_on:
       - "consul"
     volumes:
-      - ./service/config:/.config
+      - ./service/config-portal-dev:/.config
     command: ["-s","xyz-solution","-a","consul:8500"]
   keycloak:
     image: jboss/keycloak:12.0.1
@@ -44,9 +43,9 @@ services:
       - "consul"
       - "db"
     command: ["-b","keycloak","-bmanagement","keycloak"]
-    #ports:
-    #  - "8080:8080"
-    #  - "9990:9990"
+    ports:
+      - "8080:8080"
+      - "9990:9990"
     volumes:
       - ./security_realms:/security_realms
     environment:
@@ -64,16 +63,3 @@ services:
       DB_PASSWORD: postgres
       DB_SCHEMA: public
       DB_ADDR: db
-  sf-portal:
-    image: sysfoundry/sf-svc-portal:1.0-SNAPSHOT
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./xyz-solution/docs:/xyz-solution/docs
-    depends_on:
-      - "consul"
-      - "db"
-      - "keycloak"
-      - "service_config_loader"  
-    environment:
-      JAVA_TOOL_OPTIONS: "-Disis.security.logout.external=true -Dsf.solution.name=xyz-solution -Dspring.cloud.consul.host=consul"
